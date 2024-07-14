@@ -98,6 +98,23 @@ struct GridStack<Content: View>: View {
     }
 }
 
+struct customTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundStyle(.blue)
+            .padding()
+            .background(.yellow)
+            .clipShape(.ellipse)
+    }
+}
+
+extension View {
+    func customTitleStyle() -> some View {
+        self.modifier(customTitle())
+    }
+}
+
 struct ContentView: View {
     var body: some View {
         VStack {
@@ -122,6 +139,8 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                 CapsuleText(text: "Second")
                     .foregroundStyle(.yellow)
+                Text("Customed Title")
+                    .customTitleStyle()
             }
 
             GridStack(rows: 4, columns: 4) { row, col in
