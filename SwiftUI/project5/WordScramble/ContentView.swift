@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     @State private var showingError = false
+    @State private var totalScore = 0
 
     var body: some View {
         NavigationStack {
@@ -22,6 +23,9 @@ struct ContentView: View {
                 Section {
                     TextField("Enter your word", text: $newWord)
                         .textInputAutocapitalization(.never)
+                        .onSubmit {
+                            totalScore = calculateTotalScore()
+                        }
                 }
 
                 Section {
@@ -32,6 +36,10 @@ struct ContentView: View {
                         }
                     }
                 }
+                
+                Section("Score") {
+                    Text("\(totalScore)")
+                }
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
@@ -39,13 +47,19 @@ struct ContentView: View {
             .alert(errorTitle, isPresented: $showingError) { } message: {
                 Text(errorMessage)
             }
+            .toolbar() {
+                Button("Restart", action: startGame)
+            }
         }
     }
 
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard answer.count > 0 else { return }
+        guard isLongEnough(word: answer) else {
+            wordError(title: "Word too short", message: "Be longer and not use start word")
+            return
+        }
 
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original!")
@@ -74,6 +88,8 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsURL) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                usedWords = []
+                totalScore = 0
                 return
             }
         }
@@ -81,6 +97,10 @@ struct ContentView: View {
         fatalError("Could not load start.txt from bundle.")
     }
 
+    func isLongEnough(word: String) -> Bool {
+        word.count >= 3 && word != rootWord
+    }
+    
     func isOriginal(word: String) -> Bool {
         !usedWords.contains(word)
     }
@@ -110,6 +130,23 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func calculateTotalScore() -> Int {
+        var total = 0
+        total += usedWords.count * 5
+        for word in usedWords {
+            total += calculateEachScore(word: word)
+        }
+        return total
+    }
+    
+    func calculateEachScore(word: String) -> Int {
+        var score = 0
+        if word.count >= rootWord.count / 2 {
+            score += word.count
+        }
+        return score
     }
 }
 
