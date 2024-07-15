@@ -3,7 +3,7 @@
 //  GuessTheFlag
 //
 //  Created by Paul Hudson on 11/10/2023.
-//  Modified by Xinlei Feng on 07/13/2024.
+//  Modified by Xinlei Feng on 07/15/2024.
 //
 
 import SwiftUI
@@ -18,6 +18,22 @@ struct FlagImage: View {
     }
 }
 
+struct FlagButton: View {
+    var imageName: String
+    var rotation: Double
+    var isChosen: Bool
+
+    var body: some View {
+        FlagImage(imageName: imageName)
+            .rotation3DEffect(
+                .degrees(rotation),
+                axis: (x: 0.0, y: 1.0, z: 0.0)
+            )
+            .opacity(isChosen ? 1 : 0.25)
+            .scaleEffect(isChosen ? CGSize(width: 1, height: 1) : CGSize(width: 0.5, height: 0.5))
+    }
+}
+
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Spain", "UK", "Ukraine", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
@@ -25,9 +41,10 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var userScore = 0
-    @State private var chosenFlag = 0
+    @State private var chosenFlag: Int? = nil
     @State private var questionLeft = 8
     @State private var showingRestart = false
+    @State private var rotations = [0.0, 0.0, 0.0]
     
     var body: some View {
         ZStack {
@@ -49,16 +66,23 @@ struct ContentView: View {
                         Text("Tap the flag of")
                             .foregroundStyle(.secondary)
                             .font(.subheadline.weight(.heavy))
-
+                        
                         Text(countries[correctAnswer])
                             .font(.largeTitle.weight(.semibold))
                     }
-
+                    
                     ForEach(0..<3) { number in
                         Button {
-                            flagTapped(number)
+                            withAnimation(.spring()) {
+                                rotations[number] += 360
+                                flagTapped(number)
+                            }
                         } label: {
-                            FlagImage(imageName: countries[number])
+                            FlagButton(
+                                imageName: countries[number],
+                                rotation: rotations[number],
+                                isChosen: chosenFlag == nil || chosenFlag == number
+                            )
                         }
                     }
                 }
@@ -66,7 +90,7 @@ struct ContentView: View {
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
                 .clipShape(.rect(cornerRadius: 20))
-
+                
                 Spacer()
                 Spacer()
 
@@ -84,7 +108,7 @@ struct ContentView: View {
             if scoreTitle == "Correct" {
                 Text("Your score is \(userScore)")
             } else {
-                Text("Wrong! That's the flag of \(countries[chosenFlag])")
+                Text("Wrong! That's the flag of \(countries[chosenFlag ?? 0])")
             }
         }
         
@@ -115,6 +139,7 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        chosenFlag = nil
     }
     
     func reset() {
