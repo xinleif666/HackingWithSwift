@@ -3,6 +3,7 @@
 //  iExpense
 //
 //  Created by Paul Hudson on 15/10/2023.
+//  Modified by Xinlei Feng on 15/07/2024.
 //
 
 import SwiftUI
@@ -40,25 +41,23 @@ struct ContentView: View {
     @State private var expenses = Expenses()
 
     @State private var showingAddExpense = false
-
+    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(expenses.items) { item in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(item.name)
-                                .font(.headline)
-
-                            Text(item.type)
-                        }
-
-                        Spacer()
-
-                        Text(item.amount, format: .currency(code: "USD"))
+                Section("Personal expense") {
+                    ForEach(expenses.items.filter { $0.type == "Personal" }) { item in
+                        expenseRow(for: item)
                     }
+                    .onDelete(perform: removeItems)
                 }
-                .onDelete(perform: removeItems)
+                
+                Section("Business expense") {
+                    ForEach(expenses.items.filter { $0.type == "Business" }) { item in
+                        expenseRow(for: item)
+                    }
+                    .onDelete(perform: removeItems)
+                }
             }
             .navigationTitle("iExpense")
             .toolbar {
@@ -74,6 +73,33 @@ struct ContentView: View {
 
     func removeItems(at offsets: IndexSet) {
         expenses.items.remove(atOffsets: offsets)
+    }
+    
+    func checkAmountLevel(value: Double) -> Color {
+        if value <= 10 {
+            return .green
+        } else if value > 10 && value <= 100 {
+            return .blue
+        } else {
+            return .red
+        }
+    }
+    
+    @ViewBuilder
+    func expenseRow(for item: ExpenseItem) -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(item.name)
+                    .font(.headline)
+
+                Text(item.type)
+            }
+
+            Spacer()
+            
+            Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                .foregroundStyle(checkAmountLevel(value: item.amount))
+        }
     }
 }
 
