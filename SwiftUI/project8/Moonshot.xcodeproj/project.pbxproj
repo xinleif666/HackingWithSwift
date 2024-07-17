@@ -19,6 +19,7 @@
 		51FE10BF2AF05CD500B2AD74 /* Color-Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE10BE2AF05CD500B2AD74 /* Color-Theme.swift */; };
 		51FE10C72AF1B81B00B2AD74 /* MissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE10C62AF1B81B00B2AD74 /* MissionView.swift */; };
 		51FE10C92AF1C15200B2AD74 /* AstronautView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FE10C82AF1C15200B2AD74 /* AstronautView.swift */; };
+		B6BB6EBE2C46FB3E007C6F5B /* CrewScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BB6EBD2C46FB3E007C6F5B /* CrewScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		51FE10BE2AF05CD500B2AD74 /* Color-Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Theme.swift"; sourceTree = "<group>"; };
 		51FE10C62AF1B81B00B2AD74 /* MissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionView.swift; sourceTree = "<group>"; };
 		51FE10C82AF1C15200B2AD74 /* AstronautView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronautView.swift; sourceTree = "<group>"; };
+		B6BB6EBD2C46FB3E007C6F5B /* CrewScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				51FE10A62AEEF4DD00B2AD74 /* MoonshotApp.swift */,
 				51FE10A82AEEF4DD00B2AD74 /* ContentView.swift */,
 				51FE10C62AF1B81B00B2AD74 /* MissionView.swift */,
+				B6BB6EBD2C46FB3E007C6F5B /* CrewScrollView.swift */,
 				51FE10C82AF1C15200B2AD74 /* AstronautView.swift */,
 				51FE10BE2AF05CD500B2AD74 /* Color-Theme.swift */,
 				51FE10B82AF0503000B2AD74 /* Astronaut.swift */,
@@ -165,6 +168,7 @@
 			files = (
 				51FE10C72AF1B81B00B2AD74 /* MissionView.swift in Sources */,
 				51FE10B92AF0503000B2AD74 /* Astronaut.swift in Sources */,
+				B6BB6EBE2C46FB3E007C6F5B /* CrewScrollView.swift in Sources */,
 				51FE10C92AF1C15200B2AD74 /* AstronautView.swift in Sources */,
 				51FE10BF2AF05CD500B2AD74 /* Color-Theme.swift in Sources */,
 				51FE10A92AEEF4DD00B2AD74 /* ContentView.swift in Sources */,
