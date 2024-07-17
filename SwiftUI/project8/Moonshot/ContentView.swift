@@ -20,9 +20,7 @@ struct GridView: View {
             ScrollView {
                 LazyVGrid(columns: columns) {
                     ForEach(missions) { mission in
-                        NavigationLink {
-                            MissionView(mission: mission, astronauts: astronauts)
-                        } label: {
+                        NavigationLink(value: mission) {
                             VStack {
                                 Image(mission.image)
                                     .resizable()
@@ -53,6 +51,9 @@ struct GridView: View {
                 }
                 .padding([.horizontal, .bottom])
             }
+            .navigationDestination(for: Mission.self) { mission in
+                MissionView(mission: mission, astronauts: astronauts)
+            }
             .navigationTitle("Moonshot")
             .background(.darkBackground)
             .preferredColorScheme(.dark)
@@ -67,9 +68,7 @@ struct ListView: View {
     var body: some View {
         NavigationStack {
             List(missions) { mission in
-                NavigationLink {
-                    MissionView(mission: mission, astronauts: astronauts)
-                } label: {
+                NavigationLink(value: mission) {
                     VStack {
                         Image(mission.image)
                             .resizable()
@@ -98,6 +97,9 @@ struct ListView: View {
                 }
             }
             .padding([.horizontal, .bottom])
+        }
+        .navigationDestination(for: Mission.self) { mission in
+            MissionView(mission: mission, astronauts: astronauts)
         }
         .navigationTitle("Moonshot")
         .background(.darkBackground)

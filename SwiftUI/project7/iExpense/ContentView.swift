@@ -41,6 +41,7 @@ struct ContentView: View {
     @State private var expenses = Expenses()
 
     @State private var showingAddExpense = false
+    @State private var navigationTitle = "iExpense"
     
     var body: some View {
         NavigationStack {
@@ -59,15 +60,23 @@ struct ContentView: View {
                     .onDelete(perform: removeItems)
                 }
             }
-            .navigationTitle("iExpense")
             .toolbar {
-                Button("Add Expense", systemImage: "plus") {
-                    showingAddExpense = true
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button("Add Expense", action: {
+                        showingAddExpense = true
+                    })
+                }
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    TextField("Enter Title", text: $navigationTitle)
+                        .frame(width: 200, height: 30)
+                        .textFieldStyle(.roundedBorder)
                 }
             }
-            .sheet(isPresented: $showingAddExpense) {
+            .navigationDestination(isPresented: $showingAddExpense) {
                 AddView(expenses: expenses)
+                    .navigationBarBackButtonHidden()
             }
+            .navigationTitle($navigationTitle)
         }
     }
 
